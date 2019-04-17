@@ -540,6 +540,13 @@ $.widget( "ui.autocomplete", {
 	_suggest: function( items ) {
 		var ul = this.menu.element.empty();
 		this._renderMenu( ul, items );
+		// On Android 9 menuselect is never called, only a blur event is generated when an item is clicked. By setting cancelBlur = true
+		// after a touchstart event on a .ui-menu-item, menuselect is called again
+		this._on({
+			"touchstart .ui-menu-item": function (event) {
+				this.cancelBlur = true;
+			}
+		});
 		this.isNewMenu = true;
 		this.menu.refresh();
 
